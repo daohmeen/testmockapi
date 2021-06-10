@@ -8,6 +8,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true}))
 
 let todos = [];
+let seed = 0;
 
 app.post('/api/register',(req,res)=>{
     res.send({
@@ -16,7 +17,7 @@ app.post('/api/register',(req,res)=>{
 })
 
 app.post('/api/login',(req,res)=>{
-    if(req.username === "por01" && req.password === "1234"){
+    if(req.body.username === "por01" && req.body.password === "1234"){
         return res.send({
             token:"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
         })
@@ -37,7 +38,12 @@ app.get('/api/dashboard/14',(req,res)=> {
 })
 
 app.post('/api/dashboard/14',(req,res)=> {
-    todos = [...req.data] 
+    const data = req.body.data.map(todo => {
+        todo.task_id = seed + 1;
+        seed++;
+        return todo;
+    })
+    todos = [...req.body.data] 
     res.send({message:"successful"})
 })
 
